@@ -1,0 +1,47 @@
+version: '3'
+services:
+  flaskapp:
+    image: me/flaskapp
+    build:
+      context: .
+    volumes:
+    - ./app/public:/usr/src/app/public
+    networks:
+    - web_nw
+    - db_nw
+    depends_on:
+    - db
+    restart: always
+    #stdin_open: true
+    #tty: true
+    #entrypoint: /usr/src/app/start_uwsgi.sh
+  nginx:
+    image: nginx:alpine
+    ports:
+    - 80:80
+    volumes:
+    - ./nginx/:/etc/nginx/conf.d/
+    - ./flaskapp/public:/usr/share/nginx/html
+    depends_on:
+    - flaskapp
+    networks:
+    - web_nw
+    restart: always
+  db:
+    image: postgres:10.5-alpine
+    ports:
+    - 5432:5432
+    volumes:
+    - dbdata:/var/lib/postgresql/data
+    env_file:
+    - postgres_conf/env_file
+    networks:
+    - db_nw
+    restart: always
+networks:
+  web_nw:
+    driver: bridge
+  db_nw:
+    driver: bridge
+volumes:
+  dbdata:
