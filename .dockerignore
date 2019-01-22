@@ -1,5 +1,4 @@
 .git
 .idea
 _pycache_
-conf.d
 venv
