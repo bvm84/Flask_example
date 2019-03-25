@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
+    <title>{{title}}</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg static-top ">
+   <a class="navbar-brand" href="{{ url_for('index') }}">Home</a>
+   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+   </button>
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">
+        <ul class="navbar-nav mr-2">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('test_route') }}">Test</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('test_redir') }}">Redirect test</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% include "header.html" %}
+{% block content %}{% endblock %}
+{% include "footer.html" %}
+</body>
+</html>

@@ -1,0 +1,57 @@
+FROM python:3.6.6-alpine
+MAINTAINER Brendel Vadim <brendel.vadim@gmail.com>
+# install dependencies
+# the lapack package is only in the community repository
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk/repositories
+RUN apk --update add --no-cache \
+    lapack-dev \
+    gcc \
+    freetype-dev
+# Install dependencies
+RUN apk add --no-cache --virtual .build-deps \
+    gfortran \
+    musl-dev \
+    g++
+RUN ln -s /usr/include/locale.h /usr/include/xlocale.h
+
+VOLUME /usr/src/app/public
+WORKDIR /usr/src/app
+COPY . .
+RUN rm -rf public/*
+RUN file="$(ls -1 /usr/src/app)" && echo $file
+#RUN apk --no-cache add build-base
+RUN apk add build-base \
+            #postgresql-dev \
+            curl \
+            linux-headers \
+            pcre-dev \
+            python3-dev
+RUN curl -O http://projects.unbit.it/downloads/uwsgi-lts.tar.gz \
+    tar -xvzf uwsgi-2.0.12.tar.gz \
+    cd u
+
+#RUN apk add --no-cache \
+#        uwsgi-python3 \
+#        uwsgi-http
+RUN pip3 install uWSGI
+RUN pip3 install -r requirements.txt
+
+# removing dependencies
+RUN apk del .build-deps
+
+EXPOSE 5090
+ENTRYPOINT ["tail", "-f", "/dev/null"]
+#ENTRYPOINT ["python"]
+#CMD ["upwbp.py"]
+#CMD [ "uwsgi", "uswgi_init.ini" ]
+#CMD ["uwsgi","--http", "127.0.0.1:5090", "--module application:app"]
+#CMD [ "uwsgi", "--http", "0.0.0.0:80", \
+#               "--uid", "uwsgi", \
+#               "--plugins", "python3, http", \
+#               "--protocol", "uwsgi", \
+#               "--wsgi", "application:app" ]
+#CMD [ "uwsgi", "--plugins", "python3, http", \
+#               "--http", "0.0.0.0:80", \
+#               "--logto", "file:/usr/src/app/uwsgi.log", \
+#               "--mount", "/ap=application.py", \
+#               "--callable", "app"]

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+{% from "_formhelpers.html" import render_field %}
+{% if error == 'Nonecid' %}
+    Ошибочный номер ЭКГ
+{% elif error == 'ppg_error' %}
+    Нет ФПГ для данного измерения
+{% elif error == 'wrong_db' %}
+    Неправильно введена база данных
+{% else %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 col-md-12 col-sm-12 desc">
+            <div class="input" id="input">
+                <h3>Введите ID ЭКГ</h3>
+                <h1>Sign In</h1>
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.username.label }}<br>
+                        {{ form.username(size=32) }}
+                        {% for error in form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ form.password.label }}<br>
+                        {{ form.password(size=32) }}
+                        {% for error in form.password.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+                    <p>{{ form.submit() }}</p>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-12 col-sm-12 desc">
+            <div class="output" id="output">
+                <h3>Результат</h3>
+                Наша Раша!
+                <img src="/static/images/qvark_logo.png" class="img-fluid" alt="qvark-logo">
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
